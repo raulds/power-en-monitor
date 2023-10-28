@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@mui/material';
-import Dashboard from './components/Dashboard'
+import Viewplane from './components/Viewplane'
 import SignIn from './components/SignIn';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <Grid item sapcing={1} >
         {
           (userAuth) 
-          ? <Dashboard/>
+          ? <Viewplane/>
           : <SignIn setAuthStatus={setUserAuth}/>
         }
       </Grid>

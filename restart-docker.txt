@@ -1,0 +1,3 @@
+docker restart dbsql
+mysql -u root -p'abacate' -h 172.17.0.2
+
