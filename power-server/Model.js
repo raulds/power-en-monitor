@@ -41,7 +41,6 @@ const Powerdot = connection.define( 'powerdots', {
         primaryKey: true,
         autoIncrement: true
     },
-
     active_power: {
         type: Sequelize.FLOAT,
         allowNull: true

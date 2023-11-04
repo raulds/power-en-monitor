@@ -3,18 +3,21 @@
         "name": "virtMeter",
         "meterkey": null,
         "metertype": "virtual",
-        "metermodel": "python-source"
+        "metermodel": "python-source",
+        "dashboardId": 1
     },
     {
         "name": "TuyaVirtMeter",
         "meterkey": "vdevo169560839264911",
         "metertype": "virtual",
-        "metermodel": "vdevo"
+        "metermodel": "vdevo",
+        "dashboardId": 1
     },
     {
         "name": "TuyaDevice",
         "meterkey": null,
         "metertype": "device",
-        "metermodel": ""
+        "metermodel": "",
+        "dashboardId": 2
     }
 ]
