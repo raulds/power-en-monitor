@@ -180,14 +180,41 @@ const main = async () => {
                 return
             }
 
+            /*
             console.log('fecthing data from tuya: ', meter.meterkey, meter.name)
             device_id = meter.meterkey 
+            */
+            /*
             commands = await context.request({
                 path: `/v2.0/cloud/thing/${device_id}/shadow/properties`,
                 method: 'GET',
                 body: {}
             })
+            */
+            context.request({
+                path: `/v2.0/cloud/thing/${device_id}/shadow/properties`,
+                method: 'GET',
+                body: {}
+            }).then((data) => {
+                console.log('debug')
+                console.log('data from tuya: ', meter.meterkey, meter.name)
+                if (meter.metermodel === 'vdevo') {
+                    console.log(data)
+                    /*
+                    let meterData = {
+                        voltage: data.result.properties[5].value,
+                        current: data.result.properties[3].value ,
+                        power: data.result.properties[4].value,
+                    }
+                    */
+                }
+                console.log(meterData)
+            }).catch((error) => {
+                console.log('failed to get one sample from the meter')
+                console.log(error)
+            })
 
+            /*
             if (!commands.success){
                 console.log('failed to fetch meter measurement info')
                 console.log(meter.metername)
@@ -195,9 +222,7 @@ const main = async () => {
                 return
             }
 
-            /*
-                JSON.stringify(commands, null, 2)
-            */
+            //    JSON.stringify(commands, null, 2)
             let meterData = {
                 voltage: null,
                 current: null,
@@ -225,7 +250,7 @@ const main = async () => {
                 current: meterData.current,
                 active_power: meterData.power
             })
-
+            */
         })
     }
 
@@ -248,6 +273,9 @@ const main = async () => {
     */
 }
 
+// uncomment this main function to start fetching meter data from tuya
+/*
 main().catch(err => {
     console.log(err)
 })
+*/
