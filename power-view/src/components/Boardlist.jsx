@@ -9,14 +9,15 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
 
-const Boardlist = ({setDashboard}) => {
+const Boardlist = ({setMainBoard}) => {
 
   const [dashboards, setDashboards] = useState([])
 
   useEffect( () => {
     axios.get('http://localhost:3000/boards').then ( res => {
       setDashboards(res.data)
-      console.log(res.data)
+      setMainBoard(res.data[0])
+      console.log(res.data[0])
     }).catch(error => {
       console.log(error)
       console.log('failed to fetch meter list')
@@ -24,8 +25,8 @@ const Boardlist = ({setDashboard}) => {
   }, [])
 
   const handleClcik = (board) => {
-    console.log(meter.name)
-    setDashboard(board)
+    console.log(board)
+    setMainBoard(board)
   }
 
   if (dashboards.length == 0) {

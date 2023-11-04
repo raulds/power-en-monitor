@@ -9,23 +9,29 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { ElectricMeter } from '@mui/icons-material';
 
 
-const MeterList = (props) => {
+const MeterList = ({boardId, setMeterSource}) => {
 
   const [energyMeters, setEnergyMeters] = useState([])
 
   useEffect( () => {
     axios.get('http://localhost:3000/meters').then ( res => {
-      setEnergyMeters(res.data)
-      console.log(res.data)
+      let meterlist = []
+      res.data.forEach(meter => {
+        if (meter.dashboardId === boardId) {
+          meterlist.push(meter)
+        }  
+      });
+      setEnergyMeters(meterlist)
+      console.log(meterlist)
     }).catch(error => {
       console.log(error)
       console.log('failed to fetch meter list')
     })
-  }, [])
+  }, [boardId])
 
   const handleClcik = (meter) => {
     console.log(meter.name)
-    props.setMeterSource(meter)
+    setMeterSource(meter)
   }
 
   if (energyMeters.length == 0) {

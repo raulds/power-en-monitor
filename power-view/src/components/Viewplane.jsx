@@ -32,7 +32,7 @@ import ReactivePowerGraph from "./ReactivePowerGraph";
 export default function Viewplane() {
   const [open, setOpen] = React.useState(false);
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
-  const [dashboard, setDashboard] = React.useState({/*name:'meter01', id:1*/})
+  const [dashboard, setBoard] = React.useState({id:1})
   const [dataFormat, setDataFormat] = React.useState('')
 
   const toggleDrawer = () => {
@@ -87,9 +87,9 @@ export default function Viewplane() {
           <Divider />
 
           <List component="nav">
-              <Boardlist setDashboard={setDashboard}/>
+              <Boardlist setMainBoard={setBoard}/>
             <Divider sx={{ my: 1 }} />
-              <MeterList setMeterSource={setEnergyMeter}/>
+              <MeterList boardId={dashboard.id} setMeterSource={setEnergyMeter}/>
             <Divider sx={{ my: 1 }} />
               <SecondaryListItems setInterval={setDataFormat} />
             
