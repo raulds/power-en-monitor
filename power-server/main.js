@@ -3,7 +3,7 @@ const cors =  require('cors')
 const app = express();
 const port = 3000;
 
-const { Meter, Samples, Users} = require('./Model')
+const { Meter, Samples, Users, Dashboard } = require('./Model')
 
 const userRoute = require('./userRoute');
 
@@ -38,6 +38,18 @@ app.get('/meters', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ message:'failed to get meter list' })
+    }
+});
+
+app.get('/boards', async (req, res) => {
+
+    try {
+        const boards = await Dashboard.findAll()
+        console.log(boards)
+        res.json(boards)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message:'failed to get dashboard list' })
     }
 });
 

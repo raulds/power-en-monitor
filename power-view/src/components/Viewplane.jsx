@@ -16,6 +16,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // Lists - make it import from database
 import { mainListItems, SecondaryListItems } from "./listItems";
 import MeterList from './MeterList'
+import Boardlist from "./Boardlist";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -31,6 +32,7 @@ import ReactivePowerGraph from "./ReactivePowerGraph";
 export default function Viewplane() {
   const [open, setOpen] = React.useState(false);
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
+  const [dashboard, setDashboard] = React.useState({/*name:'meter01', id:1*/})
   const [dataFormat, setDataFormat] = React.useState('')
 
   const toggleDrawer = () => {
@@ -85,7 +87,8 @@ export default function Viewplane() {
           <Divider />
 
           <List component="nav">
-
+              <Boardlist setDashboard={setDashboard}/>
+            <Divider sx={{ my: 1 }} />
               <MeterList setMeterSource={setEnergyMeter}/>
             <Divider sx={{ my: 1 }} />
               <SecondaryListItems setInterval={setDataFormat} />

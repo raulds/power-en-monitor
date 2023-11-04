@@ -54,6 +54,7 @@ def generate_power_sample(meterid, starttime, pasttime):
                 'power_factor': pf, 'createdAt': timestamp }
 
 
+"""
 power_samples = []
 for past in range(720):
     sample = generate_power_sample(3, datetime.now(), past)
@@ -105,7 +106,7 @@ energy_samples = []
 
 # Generate and print the samples
 for _ in range(num_samples):
-    sample = generate_metering_sample(1)
+    sample = generate_metering_sample(3)
     energy_samples.append(sample)
     print(f"Name: {sample['meterId']}, Voltage: {sample['voltage']}V, Current: {sample['current']}A, PF: {sample['power_factor']}W, Apparent Power:{sample['apparent_power']}VA, Active Power: {sample['active_power']}W, Reactive Power: {sample['active_power']}VAR")
 
@@ -149,5 +150,3 @@ finally:
         cursor.close()
         connection.close()
         print("MySQL connection is closed.")
-
-"""

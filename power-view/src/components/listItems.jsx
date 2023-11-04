@@ -12,6 +12,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import TimelineIcon from '@mui/icons-material/Timeline';
 
 export const ListRegisteredMeters = () => {
 
@@ -93,21 +94,21 @@ export const SecondaryListItems = (props) => {
 
       <ListItemButton onClick={ () => props.setInterval('byhour') }>
         <ListItemIcon>
-          <AssignmentIcon />
+          <TimelineIcon/>
         </ListItemIcon>
         <ListItemText primary="Last Hour" />
       </ListItemButton>
 
       <ListItemButton onClick={ () => props.setInterval('byday') }>
         <ListItemIcon>
-          <AssignmentIcon />
+          <TimelineIcon/>
         </ListItemIcon>
         <ListItemText primary="Last Day" />
       </ListItemButton>
 
       <ListItemButton onClick={ () => props.setInterval('byread') }>
         <ListItemIcon>
-          <AssignmentIcon />
+          <TimelineIcon/>
         </ListItemIcon>
         <ListItemText primary="Last Interval" />
       </ListItemButton>

@@ -6,16 +6,16 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { ElectricMeter } from '@mui/icons-material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 
-const MeterList = (props) => {
+const Boardlist = ({setDashboard}) => {
 
-  const [energyMeters, setEnergyMeters] = useState([])
+  const [dashboards, setDashboards] = useState([])
 
   useEffect( () => {
-    axios.get('http://localhost:3000/meters').then ( res => {
-      setEnergyMeters(res.data)
+    axios.get('http://localhost:3000/boards').then ( res => {
+      setDashboards(res.data)
       console.log(res.data)
     }).catch(error => {
       console.log(error)
@@ -23,30 +23,30 @@ const MeterList = (props) => {
     })
   }, [])
 
-  const handleClcik = (meter) => {
+  const handleClcik = (board) => {
     console.log(meter.name)
-    props.setMeterSource(meter)
+    setDashboard(board)
   }
 
-  if (energyMeters.length == 0) {
+  if (dashboards.length == 0) {
     return (
       <ListSubheader component="div" inset>
-          No Meters Available 
+          No dashboards available 
       </ListSubheader>
     )
   } else {
     return (
       <React.Fragment>
         <ListSubheader component="div" inset>
-          Select Meter
+          Select Dashboard 
         </ListSubheader>
       {
-        energyMeters.map( meter => (
-          <ListItemButton key={meter.name} onClick={() => handleClcik(meter)}>
+        dashboards.map( board => (
+          <ListItemButton key={board.name} onClick={() => handleClcik(board)}>
               <ListItemIcon>
-                <ElectricMeter/>
+                <DashboardIcon/>
               </ListItemIcon>
-              <ListItemText primary={meter.name} />
+              <ListItemText primary={board.name} />
           </ListItemButton>
         ))
       }
@@ -55,4 +55,4 @@ const MeterList = (props) => {
   }
 }
 
-export default MeterList 
+export default Boardlist 
