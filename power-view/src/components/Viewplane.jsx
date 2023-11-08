@@ -18,26 +18,33 @@ import { mainListItems, SecondaryListItems } from "./listItems";
 import MeterList from './MeterList'
 import Boardlist from "./Boardlist";
 
+// content drawer
+import Meterview from "./Meterview";
+
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 // importing VoltageGraph
-import VoltageGraph from "./VoltageGraph";
-import CurrentGraph from "./CurrentGraph";
-import ApparentPowerGraph from "./ApparentPowerGraph"
-import ActivePowerGraph from "./ActivePowerGraph";
-import PowerFactorGraph from "./PowerFactorGraph";
-import ReactivePowerGraph from "./ReactivePowerGraph";
+import Dashboard from "./Dashboard";
 
 export default function Viewplane() {
   const [open, setOpen] = React.useState(false);
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
   const [dashboard, setBoard] = React.useState({id:1})
   const [dataFormat, setDataFormat] = React.useState('')
+  const [view, setView] = React.useState('dashboard')
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const DataView = () => {
+    if (view === 'dashboard') {
+      return <Dashboard/>
+    } else if (view === 'meter') {
+      return <Meterview energyMeter={energyMeter} />          
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -87,9 +94,9 @@ export default function Viewplane() {
           <Divider />
 
           <List component="nav">
-              <Boardlist setMainBoard={setBoard}/>
+              <Boardlist setMainBoard={setBoard} setView={setView}/>
             <Divider sx={{ my: 1 }} />
-              <MeterList boardId={dashboard.id} setMeterSource={setEnergyMeter}/>
+              <MeterList boardId={dashboard.id} setMeterSource={setEnergyMeter} setView={setView} />
             <Divider sx={{ my: 1 }} />
               <SecondaryListItems setInterval={setDataFormat} />
             
@@ -109,95 +116,8 @@ export default function Viewplane() {
           { /* just to place some space between the AppBar and the content*/ }
           <Toolbar />
 
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item>
-                <Paper sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Voltage Monitor
-                  <VoltageGraph meter={energyMeter.id} />
-                </Paper>
-              </Grid>
-
-              <Grid item>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Current Monitor
-                  <CurrentGraph meter={energyMeter.id}/>
-                </Paper>
-              </Grid>
-
-              <Grid item>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Power Factor 
-                  <PowerFactorGraph meter={energyMeter.id}/>
-                </Paper>
-              </Grid>
-
-              <Grid item>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Active Power Monitor 
-                  <ActivePowerGraph meter={energyMeter.id}/>
-                </Paper>
-              </Grid>
-
-              <Grid item>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Apparent Power Monitor 
-                  <ApparentPowerGraph meter={energyMeter.id}/>
-                </Paper>
-              </Grid>
-              
-              <Grid item>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'auto',
-                    width: 'auto'
-                  }}>
-                  Reactive Power Monitor 
-                  <ReactivePowerGraph meter={energyMeter.id}/>
-                </Paper>
-              </Grid>
-
-            </Grid>
-          </Container>
+          { /* Component to set the view between meters and dashboards */ }
+          <DataView/>
 
         </Box>
       </Box>

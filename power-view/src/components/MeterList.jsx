@@ -9,7 +9,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { ElectricMeter } from '@mui/icons-material';
 
 
-const MeterList = ({boardId, setMeterSource}) => {
+const MeterList = ({boardId, setMeterSource, setView}) => {
 
   const [energyMeters, setEnergyMeters] = useState([])
 
@@ -31,6 +31,7 @@ const MeterList = ({boardId, setMeterSource}) => {
 
   const handleClcik = (meter) => {
     console.log(meter.name)
+    setView('meter')
     setMeterSource(meter)
   }
 

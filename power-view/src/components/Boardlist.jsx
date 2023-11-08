@@ -5,11 +5,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
 
-const Boardlist = ({setMainBoard}) => {
+const Boardlist = ({setMainBoard, setView}) => {
 
   const [dashboards, setDashboards] = useState([])
 
@@ -26,6 +25,7 @@ const Boardlist = ({setMainBoard}) => {
 
   const handleClcik = (board) => {
     console.log(board)
+    setView('dashboard')
     setMainBoard(board)
   }
 

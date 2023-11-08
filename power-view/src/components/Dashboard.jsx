@@ -1,11 +1,12 @@
 import * as React from "react";
 
-export const ListRegisteredMeters = ( {name, code, setMeterList}) => {
+export const Dashboard = ( {name, code, setMeterList} ) => {
 
     return (
         <div>
             Simulating Default Dashboard
         </div>
     )
-
 }
+
+export default Dashboard;
