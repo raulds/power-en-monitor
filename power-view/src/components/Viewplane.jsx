@@ -40,7 +40,7 @@ export default function Viewplane() {
 
   const DataView = () => {
     if (view === 'dashboard') {
-      return <Dashboard/>
+      return <Dashboard boardid={dashboard.id}/>
     } else if (view === 'meter') {
       return <Meterview energyMeter={energyMeter} />          
     }
