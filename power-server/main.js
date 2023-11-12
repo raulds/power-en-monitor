@@ -3,14 +3,17 @@ const cors =  require('cors')
 const app = express();
 const port = 3000;
 
-const { Meter, Samples, Users, Dashboard } = require('./Model')
-
-const userRoute = require('./userRoute');
-
 const axios = require('axios')
 const crypto = require('crypto')
 
+const { Meter, Samples, Users, Dashboard } = require('./Model')
+
+const userRoute = require('./userRoute');
+const meterpw = require('./meterpw')
+
+
 const { TuyaContext } = require('@tuya/tuya-connector-nodejs')
+
 
 app.use(cors())
 app.use(express.static('public'));
@@ -18,11 +21,13 @@ app.use(express.json())
 
 // adding a route midleware to authentication
 app.use('/users/', userRoute)
+app.use('/meterpw/', meterpw)
 
 // Define a route
 app.get('/', (req, res) => {
   res.send('Hello, Express!');
 });
+
 
 // Add another route
 app.get('/about', (req, res) => {
@@ -37,7 +42,7 @@ app.get('/meters', async (req, res) => {
         res.json(meters)
     } catch (error) {
         console.log(error)
-        res.status(500).json({ message:'failed to get meter list' })
+        res.status(500).json({ err: true, message:'failed to get meter list' })
     }
 });
 
