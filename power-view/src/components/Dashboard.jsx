@@ -3,6 +3,7 @@ import * as React from "react";
 import { Container, Grid, Paper } from "@mui/material"
 import Cardinfo from "./Cardinfo"; 
 import CardBarGraph from "./CardBarGraph";
+import CardPizzaGraph from "./CardPizzagraph"
 import axios from 'axios'
 
 /*
@@ -11,30 +12,18 @@ import axios from 'axios'
     calculate it acording to the belloging meter(s) and the time
     interval.
 */
-export const Dashboard = ( {boardid} ) => {
+export const Dashboard = ( {boardid, boardMeterList} ) => {
 
     const [boardMeters, setBoardMeters] = React.useState()
 
     React.useEffect( () => {
         // lets load all the meters which belogs to this dashboard
-        axios.get(`http://localhost:3000/meters/${boardid}`)
-        .then ( res => {
-            if (res.data === null) {
-                console.log('Service not available')
-                return
-            }
 
-            if (res.data.err) {
-                console.log('failed to fetch meters from databae')
-                return
-            }
-
-            setBoardMeters(res.data)
-        }).catch(err => {
-
-            console.log(err)
-        })
-    }, [])
+        boardMeterList.forEach(meter => {
+            
+        });
+        
+    }, )
 
     const generatePowerCards = () => {
 
@@ -42,6 +31,13 @@ export const Dashboard = ( {boardid} ) => {
             <div>Numeric Power cards</div>
         )
     }
+
+    const pizzaData = [
+        { name: 'Cheese', value: 20 },
+        { name: 'Pepperoni', value: 30 },
+        { name: 'Vegetarian', value: 25 },
+        { name: 'Hawaiian', value: 15 },
+      ];
 
     const energyData = [
         { label: 'Hour 1', value: 50 },
@@ -85,28 +81,36 @@ export const Dashboard = ( {boardid} ) => {
                         unit="kWh"
                         timeInterval="Last 24 hours"/>
                 </Grid>
+
                 <Grid item>
-                    <Cardinfo
-                        title="Energy Consumed Meter A"
-                        value={250}
-                        unit="kWh"
-                        timeInterval="Last 24 hours"/>
+                    <CardPizzaGraph tittle={"Energy Consumed By Meter"} data={pizzaData}
+                                timeInterval={"Last 24 hours"}/>
                 </Grid>
-                <Grid item>
-                    <Cardinfo
-                        title="Energy Consumed Meter B"
-                        value={250}
-                        unit="kWh"
-                        timeInterval="Last 24 hours"/>
-                </Grid>
-                <Grid item>
-                    <CardBarGraph
-                        title=""
-                        data={energyData}
-                        unit="kWh"
-                        timeInterval="Last 24 hours"
-                    />
-                </Grid>
+
+                {
+                    boardMeterList.map( meter => (
+                        <>
+                        <Grid item>
+                            <Cardinfo
+                                title={`Energy Consumed Meter ${meter.name}`}
+                                value={250}
+                                unit="kWh"
+                                timeInterval="Last 24 hours"/>
+                        </Grid>
+
+                        <Grid item>
+                            <CardBarGraph
+                                title={`Energy Consuption by Meter ${meter.name}`}
+                                data={energyData}
+                                unit="kWh"
+                                timeInterval="Last 24 hours"
+                            />
+                        </Grid>
+                        </>
+                    ))
+
+                }
+                
             </Grid>
         </Container>
     )

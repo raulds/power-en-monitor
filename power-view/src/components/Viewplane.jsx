@@ -31,6 +31,7 @@ export default function Viewplane() {
   const [open, setOpen] = React.useState(false);
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
   const [dashboard, setBoard] = React.useState({id:1})
+  const [meterList, setMeterList] = React.useState([])
   const [dataFormat, setDataFormat] = React.useState('')
   const [view, setView] = React.useState('dashboard')
 
@@ -40,7 +41,7 @@ export default function Viewplane() {
 
   const DataView = () => {
     if (view === 'dashboard') {
-      return <Dashboard boardid={dashboard.id}/>
+      return <Dashboard boardid={dashboard.id} boardMeterList={meterList}/>
     } else if (view === 'meter') {
       return <Meterview energyMeter={energyMeter} />          
     }
@@ -96,7 +97,7 @@ export default function Viewplane() {
           <List component="nav">
               <Boardlist setMainBoard={setBoard} setView={setView}/>
             <Divider sx={{ my: 1 }} />
-              <MeterList boardId={dashboard.id} setMeterSource={setEnergyMeter} setView={setView} />
+              <MeterList boardId={dashboard.id} boardMeterList={setMeterList} setMeterSource={setEnergyMeter} setView={setView} />
             <Divider sx={{ my: 1 }} />
               <SecondaryListItems setInterval={setDataFormat} />
             

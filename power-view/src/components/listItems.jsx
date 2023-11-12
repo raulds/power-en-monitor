@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios'
 
+/*
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+*/
+
+
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -59,8 +66,79 @@ export const ListRegisteredMeters = () => {
       </React.Fragment>
     )
   }
-
 }
+
+//export const secondaryListItems = (
+export const SecondaryListItems = ( {setInterval} ) => {
+
+  const [selectedDate, handleDateChange] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const handleButtonClick = () => {
+    setOpen(true);
+  }
+
+  const handleDateClose = () => {
+    setOpen(false);
+  }
+
+  return (
+    <React.Fragment>
+      <ListSubheader component="div" inset>
+        Select Interval 
+      </ListSubheader>
+
+      <ListItemButton onClick={ () => setInterval('byhour') }>
+        <ListItemIcon>
+          <TimelineIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Today" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => setInterval('byweek') }>
+        <ListItemIcon>
+          <TimelineIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Last 7 days" />
+      </ListItemButton>
+
+       <ListItemButton onClick={ () => setInterval('bymonth') }>
+        <ListItemIcon>
+          <TimelineIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Last 30 days" />
+      </ListItemButton>
+      
+
+      <ListItemButton onClick={ () => setInterval('byinterval') }>
+        <ListItemIcon>
+          <TimelineIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Time Interval" />
+      </ListItemButton>
+
+{/*
+      <Dialog open={open} onClose={handleDateClose}>
+        <DialogTitle>Select Date</DialogTitle>
+        <DialogContent>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              autoOk
+              variant="inline"
+              inputVariant="outlined"
+              format="MM/dd/yyyy"
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+          </MuiPickersUtilsProvider>
+        </DialogContent>
+      </Dialog>
+*/}
+
+    </React.Fragment>
+  )
+}
+
 export const mainListItems = (
 
   <React.Fragment>
@@ -82,75 +160,3 @@ export const mainListItems = (
     </ListItemButton>
   </React.Fragment>
 )
-
-//export const secondaryListItems = (
-export const SecondaryListItems = (props) => {
-
-  return (
-    <React.Fragment>
-      <ListSubheader component="div" inset>
-        Select Interval 
-      </ListSubheader>
-
-      <ListItemButton onClick={ () => props.setInterval('byhour') }>
-        <ListItemIcon>
-          <TimelineIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Last Hour" />
-      </ListItemButton>
-
-      <ListItemButton onClick={ () => props.setInterval('byday') }>
-        <ListItemIcon>
-          <TimelineIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Last Day" />
-      </ListItemButton>
-
-      <ListItemButton onClick={ () => props.setInterval('byread') }>
-        <ListItemIcon>
-          <TimelineIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Last Interval" />
-      </ListItemButton>
-
-    </React.Fragment>
-  )
-}
-//);
-
-export const old_mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon/>
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton>
-  </React.Fragment>
-);
-
-

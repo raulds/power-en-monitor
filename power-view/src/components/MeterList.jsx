@@ -9,9 +9,9 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { ElectricMeter } from '@mui/icons-material';
 
 
-const MeterList = ({boardId, setMeterSource, setView}) => {
+const MeterList = ({boardId, setMeterSource, setView, boardMeterList}) => {
 
-  const [energyMeters, setEnergyMeters] = useState([])
+  const [meterList, setMeterList] = useState([])
 
   useEffect( () => {
     axios.get('http://localhost:3000/meters').then ( res => {
@@ -21,7 +21,8 @@ const MeterList = ({boardId, setMeterSource, setView}) => {
           meterlist.push(meter)
         }  
       });
-      setEnergyMeters(meterlist)
+      boardMeterList(meterlist) 
+      setMeterList(meterlist)
       console.log(meterlist)
     }).catch(error => {
       console.log(error)
@@ -35,7 +36,7 @@ const MeterList = ({boardId, setMeterSource, setView}) => {
     setMeterSource(meter)
   }
 
-  if (energyMeters.length == 0) {
+  if (meterList.length == 0) {
     return (
       <ListSubheader component="div" inset>
           No Meters Available 
@@ -48,7 +49,7 @@ const MeterList = ({boardId, setMeterSource, setView}) => {
           Select Meter
         </ListSubheader>
       {
-        energyMeters.map( meter => (
+        meterList.map( meter => (
           <ListItemButton key={meter.name} onClick={() => handleClcik(meter)}>
               <ListItemIcon>
                 <ElectricMeter/>
