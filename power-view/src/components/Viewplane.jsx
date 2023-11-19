@@ -32,7 +32,7 @@ export default function Viewplane() {
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
   const [dashboard, setBoard] = React.useState({id:1})
   const [meterList, setMeterList] = React.useState([])
-  const [dataFormat, setDataFormat] = React.useState({type:'byday', end: new Date()})
+  const [dataFormat, setDataFormat] = React.useState({type:'today', end: new Date(), begin: new Date()})
   const [view, setView] = React.useState('dashboard')
 
   const toggleDrawer = () => {

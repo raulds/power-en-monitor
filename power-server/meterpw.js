@@ -12,7 +12,6 @@ router.post('/powerbymeter/:meterId', async (req, res) => {
     const meterid = req.params.meterId
     const { type, end, begin } = req.body
 
-
     //let startDate = new Date(2023, 10, 18)
     //let endDate = new Date(2023, 10, 18)
     let startDate = new Date(begin)
@@ -90,8 +89,8 @@ router.post('/powerbymeter/:meterId', async (req, res) => {
     res.json({
         err: false,
         message: 'default response',
-        meterId: meterid,
-        data: {
+        meterdata: {
+            meterId: meterid,
             active_power: activepower,
             reactive_power: reactivepower,
             apparent_power: apparentpower,

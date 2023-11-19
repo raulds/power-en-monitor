@@ -16,7 +16,9 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
 
     const [boardMeters, setBoardMeters] = React.useState()
     const [meterData, setMeterData] = React.useState([])
+    let receivedMeterData = []
 
+    /*
     React.useEffect( () => {
         
         console.log('selected interval')
@@ -27,21 +29,15 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
             return
         }
 
-
-        let receivedMeterData = []
-        
         boardMeterList.forEach( async meter => {
 
             try {
-
                 const res = await axios.post(`http://localhost:3000/meterpw/powerbymeter/${meter.id}`, interval)
-                if( !res.data ) {
-                    console.log('failed to fetcht power meter interval')
+                if( !res.data && res.data.err == false) {
+                    console.log('failed to fetch power meter interval')
                     return
                 }
-                console.log(res.data)
-
-                receivedMeterData.push({meter: meter.id, data: res.data})
+                setMeterData([...meterData, res.data])
 
             } catch (err) {
                 console.log(err)
@@ -50,13 +46,11 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
             
         });
 
-        setMeterData(receivedMeterData)
-
-        console.log(meterData)
-        
-        
     }, [interval])
 
+        console.log(meterData)
+        console.log('abacate')
+        */
 
     const pizzaData = [
         { name: 'Cheese', value: 20 },
@@ -97,13 +91,19 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
         // Add more data points as needed
       ];
 
+      if (!boardMeterList) {
+          return <div>Loading...</div>
+      } else {
+
+
     return (
+        
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
                 <Grid item>
                     <Cardinfo
                         title="Total of Energy Consumed"
-                        value={250}
+                        value={meterData}
                         unit="kWh"
                         timeInterval="Last 24 hours"/>
                 </Grid>
@@ -119,9 +119,9 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
                         <Grid item>
                             <Cardinfo
                                 title={`Energy Consumed Meter ${meter.name}`}
-                                value={250}
+                                meter={meter.id}
                                 unit="kWh"
-                                timeInterval="Last 24 hours"/>
+                                timeInterval={interval}/>
                         </Grid>
 
                         <Grid item>
@@ -140,6 +140,7 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
             </Grid>
         </Container>
     )
+            }
 }
 
 export default Dashboard;
