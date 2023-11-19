@@ -127,9 +127,9 @@ export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
                         <Grid item>
                             <CardBarGraph
                                 title={`Energy Consuption by Meter ${meter.name}`}
-                                data={energyData}
+                                meter={meter.id}
                                 unit="kWh"
-                                timeInterval="Last 24 hours"
+                                timeInterval={interval}
                             />
                         </Grid>
                         </React.Fragment>

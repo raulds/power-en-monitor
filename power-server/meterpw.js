@@ -153,7 +153,7 @@ router.post('/powerdata/:meterId', async (req, res) => {
         err: false,
         message: 'default response',
         meterId: meterid,
-        data: powerdata
+        meterdata: powerdata 
     })
 })
 
