@@ -168,12 +168,14 @@ router.post('/powerbyboard/:boardId', async (req, res) => {
     let startDate = new Date(begin)
     let endDate = new Date(end)
 
+    /*
     console.log('-----------------------')
     console.log(boardid, type)
     console.log('-----------------------')
     console.log(startDate)
     console.log(endDate)
     console.log('-----------------------')
+    */
     
     const foundmeters = await Meter.findAll( {where: { dashboardId : boardid}});
 
@@ -233,12 +235,14 @@ router.post('/powerbyboard/:boardId', async (req, res) => {
     //})
     }
     
+    /*
     console.log('----')
     console.log('total powers, active, reactive, apparent, avg pf')
     console.log(activepower)
     console.log(reactivepower)
     console.log(apparentpower)
     console.log('----')
+    */
 
 
     res.json({
@@ -250,6 +254,107 @@ router.post('/powerbyboard/:boardId', async (req, res) => {
             reactive_power: reactivepower,
             apparent_power: apparentpower,
         }
+    })
+})
+
+router.post('/boardpowerpercent/:boardId', async (req, res) => {
+
+    const boardid = req.params.boardId
+    const { type, end, begin } = req.body
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    console.log('-----------------------')
+    console.log(boardid, type)
+    console.log('-----------------------')
+    console.log(startDate)
+    console.log(endDate)
+    console.log('-----------------------')
+    
+    const foundmeters = await Meter.findAll( {where: { dashboardId : boardid}});
+
+    if (!(foundmeters.length > 0)) {
+        console.log('no meter found')
+        res.json({err: true, msg: 'the current dashboard has no meters registered'})
+    }
+
+    switch(type) {
+        case 'today':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
+    let activepower = 0
+    let reactivepower = 0 
+    let apparentpower = 0
+
+//    foundmeters.forEach ( async meter => {
+    
+    let powerbymeter = []
+    for ( const meter of foundmeters) {
+
+        let powerdata = await Powerdot.findAll({
+            where: {
+                meterId: meter.id,
+                createdAt : {
+                    [Op.between]: [startDate, endDate]
+                }
+            }
+        })
+        
+        console.log(powerdata[0])
+
+        activepower = 0
+        reactivepower = 0
+        apparentpower = 0
+        powerdata.forEach( sample => {
+            activepower += sample.active_power
+            reactivepower += sample.reactive_power
+            apparentpower += sample.apparent_power 
+        })
+
+        powerbymeter.push({
+            name: meter.name,
+            value: parseFloat( (activepower / 1000).toFixed(2) )
+        })
+        /*
+        powerbymeter.push( { 
+                    meterid: meter.id,
+                    active_power: activepower,
+                    reactive_power: reactivepower, 
+                    apparent_power: apparentpower })
+                    */
+    //})
+    }
+    
+    console.log('----')
+    console.log(powerbymeter)
+    console.log('----')
+
+
+    res.json({
+        err: false,
+        message: 'successfully got board consumed power',
+        powerbymeter: powerbymeter 
     })
 })
 

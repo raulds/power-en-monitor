@@ -44,7 +44,9 @@ const CardPwTotal = ({ title, board, unit, timeInterval }) => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h4" component="div">
-              { parseFloat( boardPower.active_power / 1000).toFixed(2)}
+              {
+                parseFloat( boardPower.active_power / 1000).toFixed(2)
+              }
               <Typography variant="subtitle1" component="span" color="textSecondary">
                 {unit}
               </Typography>

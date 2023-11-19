@@ -32,8 +32,8 @@ const CardBarGraph = ({ title, meter, unit, timeInterval }) => {
         })
       })
       // array prev
-      console.log('array prev')
-      console.log(formatedpw)
+      //console.log('array prev')
+      //console.log(formatedpw)
       // saving the meter data fetch from database as a state
       //setData(res.data.meterdata)
       setData(formatedpw)

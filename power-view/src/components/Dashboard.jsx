@@ -38,8 +38,10 @@ const pizzaData = [
                 </Grid>
 
                 <Grid item>
-                    <CardPizzaGraph tittle={"Energy Consumed By Meter"} data={pizzaData}
-                                timeInterval={"Last 24 hours"}/>
+                    <CardPizzaGraph 
+                        tittle={"Energy Consumed By Meter"}
+                        board={boardid}
+                        timeInterval={interval}/>
                 </Grid>
 
                 {
