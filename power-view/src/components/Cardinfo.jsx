@@ -5,9 +5,10 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 
-const Cardinfo = ({ title, meter, unit, timeInterval }) => {
+const Cardinfo = ({ title, meter, unit, timeInterval, chargeModel }) => {
 
   const [meterData, setMeterData] = React.useState({})
+  const [cost, setCost] = React.useState()
 
   React.useEffect( () => {
 
@@ -29,7 +30,18 @@ const Cardinfo = ({ title, meter, unit, timeInterval }) => {
         })
 
   }, [timeInterval])
-  
+
+  const CalcCharge = () => {
+
+    if (chargeModel.TY === 0){
+         setCost(((meterData.active_power * chargeModel.TE) + (meterData.active_power * chargeModel.TUSD))/1000)
+         console.log('-cost-')
+         console.log(cost)
+    }
+     return (
+         <div>R$ {cost}</div>
+     ) 
+  }
 
   return (
     <Card variant="outlined">
@@ -41,12 +53,17 @@ const Cardinfo = ({ title, meter, unit, timeInterval }) => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
+
             <Typography variant="h4" component="div">
               { parseFloat( meterData.active_power / 1000).toFixed(2)}
               <Typography variant="subtitle1" component="span" color="textSecondary">
                 {unit}
               </Typography>
+
             </Typography>
+          <Grid item xs={12}>
+            <CalcCharge/>
+          </Grid>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">

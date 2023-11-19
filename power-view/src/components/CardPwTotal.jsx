@@ -2,12 +2,13 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import axios from 'axios'
+import { Grid, Box } from '@mui/material';
 
-const CardPwTotal = ({ title, board, unit, timeInterval }) => {
+const CardPwTotal = ({ title, board, unit, timeInterval, chargeModel }) => {
 
   const [boardPower, setBoardPower] = React.useState({})
+  const [cost, setCost] = React.useState()
 
   React.useEffect( () => {
 
@@ -25,6 +26,7 @@ const CardPwTotal = ({ title, board, unit, timeInterval }) => {
           }
           // saving the meter data fetch from database as a state
           setBoardPower(res.data.meterdata)
+
         }).catch(err => {
           console.log(err)
           console.log('failed to fetch card info')
@@ -32,6 +34,19 @@ const CardPwTotal = ({ title, board, unit, timeInterval }) => {
 
   }, [timeInterval])
   
+
+  const CalcCharge = () => {
+
+    if (chargeModel.TY === 0){
+         setCost(((boardPower.active_power * chargeModel.TE) + (boardPower.active_power * chargeModel.TUSD))/1000)
+         console.log('-cost-')
+         console.log(cost)
+
+    }
+     return (
+         <div>R$ {cost}</div>
+     ) 
+  }
 
   return (
     <Card variant="outlined">
@@ -44,13 +59,16 @@ const CardPwTotal = ({ title, board, unit, timeInterval }) => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h4" component="div">
-              {
-                parseFloat( boardPower.active_power / 1000).toFixed(2)
-              }
-              <Typography variant="subtitle1" component="span" color="textSecondary">
+                {
+                    parseFloat( boardPower.active_power / 1000).toFixed(2)
+                }
+                <Typography variant="subtitle1" component="span" color="textSecondary">
                 {unit}
-              </Typography>
+                </Typography>
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <CalcCharge/>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">

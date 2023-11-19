@@ -13,14 +13,9 @@ import CardBarGraphDaily from "./CardBarDays";
     calculate it acording to the belloging meter(s) and the time
     interval.
 */
-export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
+export const Dashboard = ( {boardid, boardMeterList, interval } ) => {
 
-const pizzaData = [
-        { name: 'Cheese', value: 20 },
-        { name: 'Pepperoni', value: 30 },
-        { name: 'Vegetarian', value: 25 },
-        { name: 'Hawaiian', value: 15 },
-      ];
+    const [chargeModel, setChargeModel] = React.useState( { TY:0, class: 'B1', TE: 0.38737, TUSD: 0.42100 })
 
       if (!boardMeterList) {
           return <div>Loading...</div>
@@ -35,12 +30,14 @@ const pizzaData = [
                         title="Total of Energy Consumed"
                         board={boardid}
                         unit="kWh"
-                        timeInterval={interval}/>
+                        timeInterval={interval}
+                        chargeModel={chargeModel}
+                        />
                 </Grid>
 
                 <Grid item>
                     <CardPizzaGraph 
-                        tittle={"Energy Consumed By Meter"}
+                        tittle={"Energy Consumed By Meter (kW/h)"}
                         board={boardid}
                         timeInterval={interval}/>
                 </Grid>
@@ -53,7 +50,9 @@ const pizzaData = [
                                 title={`Energy Consumed Meter ${meter.name}`}
                                 meter={meter.id}
                                 unit="kWh"
-                                timeInterval={interval}/>
+                                timeInterval={interval}
+                                chargeModel={chargeModel}
+                                />
                         </Grid>
 
                         {
@@ -122,5 +121,10 @@ export default Dashboard;
         { label: 'Hour 3', value: 60 },
         // Add more data points as needed
       ];
-
+const pizzaData = [
+        { name: 'Cheese', value: 20 },
+        { name: 'Pepperoni', value: 30 },
+        { name: 'Vegetarian', value: 25 },
+        { name: 'Hawaiian', value: 15 },
+      ];
 */
