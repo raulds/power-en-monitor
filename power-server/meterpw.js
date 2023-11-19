@@ -5,16 +5,6 @@ const { Sequelize } = require('sequelize')
 const { Op } = Sequelize
 const router = express.Router()
 
-/*
-const moment = require('moment-timezone');
-
-const dateString = '2023-11-18T12:34:56.789Z';
-const dateObject = moment(dateString).tz('America/Sao_Paulo');
-
-console.log(dateObject.format()); // Output in Brazil/Sao Paulo time
-
-*/
-
 const { Meter, Samples, Users, Dashboard, Powerdot } = require('./Model')
 
 router.post('/powerbymeter/:meterId', async (req, res) => {
@@ -56,6 +46,11 @@ router.post('/powerbymeter/:meterId', async (req, res) => {
             endDate.setHours(23, 59, 59, 999)
             startDate.setDate(endDate.getDate() - 30)
             startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
         break;
     }
 
@@ -106,58 +101,64 @@ router.post('/powerbymeter/:meterId', async (req, res) => {
 })
 
 
-router.post('/powerdata/', async (req, res) => {
+router.post('/powerdata/:meterId', async (req, res) => {
+    const meterid = req.params.meterId
+    const { type, end, begin } = req.body
 
-    const { meterid, start, end } = req.body
-    console.log('received data')
-    console.log(meterid, start, end)
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
 
     const foundmeters = await Meter.findAll( {where: { id : meterid}});
-
-    console.log(foundmeters)
 
     if (!(foundmeters.length > 0)) {
         console.log('no meter found')
         res.json({err: true, msg: 'the selected meter does not exist in the database'})
     }
 
-    //let startdate = new Date(2023,5,1,0,0,1)
-    //let enddate = new Date(2023,11,30,23,59,59)
+    switch(type) {
+        case 'today':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break
 
-    /*
-    let startdate = new Date(start.year, start.month, start.day,
-                                start.hour, start.minute, start.sec)
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
 
-    let enddate = new Date(end.year, end.month, end.day,
-                            end.hour, end.minute, end.sec)
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
 
-        */
-
-    console.log('-')
-    console.log('-')
-    console.log(`start date: ${begin}`)
-    console.log(`end date: ${enddate}`)
-
-    console.log('-')
-    console.log('-')
-    console.log('-')
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
 
     let powerdata = await Powerdot.findAll({
         where: {
             meterId: meterid,
             createdAt : {
-                [Op.between]: [startdate, enddate]
+                [Op.between]: [startDate, endDate]
             }
         }
     })
-    
+
+    console.log(powerdata[0])
+
     res.json({
         err: false,
         message: 'default response',
+        meterId: meterid,
         data: powerdata
     })
 })
 
+/*
 router.post('/power/', async (req, res) => {
 
     const { meterid, start, end } = req.body
@@ -237,5 +238,6 @@ router.post('/power/', async (req, res) => {
     })
 })
 
+*/
 
 module.exports = router;
