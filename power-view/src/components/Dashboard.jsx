@@ -5,6 +5,7 @@ import Cardinfo from "./Cardinfo";
 import CardBarGraph from "./CardBarGraph";
 import CardPizzaGraph from "./CardPizzagraph"
 import CardPwTotal from "./CardPwTotal";
+import CardBarGraphDaily from "./CardBarDays";
 
 /*
     this component will just mount the cards, pizza and bar graphs
@@ -54,6 +55,17 @@ const pizzaData = [
                                 unit="kWh"
                                 timeInterval={interval}/>
                         </Grid>
+
+                        {
+                            (interval.type != 'today')
+                            ? <Grid item> <CardBarGraphDaily
+                                title={`Energy Consumed Meter ${meter.name}`}
+                                meter={meter.id}
+                                unit="kWh"
+                                timeInterval={interval}
+                            /> </Grid>
+                            : <></>
+                        }
 
                         <Grid item>
                             <CardBarGraph

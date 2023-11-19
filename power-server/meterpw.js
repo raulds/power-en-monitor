@@ -158,6 +158,103 @@ router.post('/powerdata/:meterId', async (req, res) => {
     })
 })
 
+router.post('/dailypowerdata/:meterId', async (req, res) => {
+    const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    const foundmeters = await Meter.findAll( {where: { id : meterid}});
+
+    if (!(foundmeters.length > 0)) {
+        console.log('no meter found')
+        res.json({err: true, msg: 'the selected meter does not exist in the database'})
+    }
+
+    switch(type) {
+        case 'today':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
+    // plate variables
+    let idate = new Date(endDate) 
+    let dailypowerdata = []
+    let activepower = 0
+
+    let idatebegin = new Date();
+    let idateend = new Date();
+    // iterating over days
+    while (idate > startDate) {
+
+        // updating idate begin and end
+        //idatebegin.setDate( idate.getDate())
+        //idateend.setDate( idate.getDate()) 
+        idatebegin = new Date(idate)
+        idateend = new Date(idate)
+
+        // seeting first and last hour of an date
+        idatebegin.setHours(0,0,0,0)
+        idateend.setHours(23, 59, 59, 999)
+
+        console.log('---date baoundaries---')
+        console.log(idatebegin)
+        console.log(idateend)
+        
+        let powerdata = await Powerdot.findAll({
+            where: {
+                meterId: meterid,
+                createdAt : {
+                    [Op.between]: [idatebegin, idateend]
+                }
+            }
+        })
+
+        activepower = 0
+        for ( const power of powerdata) {
+            console.log(power.active_power)
+            activepower += power.active_power
+        }
+
+        dailypowerdata.push({
+            label: idate.toString(),
+            value: activepower 
+        })
+        
+        //console.log(dailypowerdata)
+
+        // fixing iterator
+        idate.setDate(idate.getDate() - 1)
+    }
+
+    //console.log(dailypowerdata)
+
+    res.json({
+        err: false,
+        message: 'default response',
+        meterId: meterid,
+        meterdata: dailypowerdata 
+    })
+})
 
 
 router.post('/powerbyboard/:boardId', async (req, res) => {

@@ -27,7 +27,7 @@ const CardBarGraph = ({ title, meter, unit, timeInterval }) => {
       let formatedpw = []
       res.data.meterdata.forEach( pw => {
         formatedpw.push({
-          label: pw.createdAt,
+          label: pw.createdAt.toString(),
           value: pw.active_power
         })
       })

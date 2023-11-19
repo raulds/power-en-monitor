@@ -28,8 +28,8 @@ const CardPizzaGraph = ({ board, tittle, timeInterval }) => {
 
   React.useEffect( () => {
 
-    console.log('----BoardId----')
-    console.log(board)
+    //console.log('----BoardId----')
+    //console.log(board)
 
     if (!board || !timeInterval) {
       console.log('no valid meter or interval')
