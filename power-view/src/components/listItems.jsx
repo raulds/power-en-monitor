@@ -88,21 +88,21 @@ export const SecondaryListItems = ( {setInterval} ) => {
         Select Interval 
       </ListSubheader>
 
-      <ListItemButton onClick={ () => setInterval('byhour') }>
+      <ListItemButton onClick={ () => setInterval({type: 'today', end: new Date(), begin: new Date()}) }>
         <ListItemIcon>
           <TimelineIcon/>
         </ListItemIcon>
         <ListItemText primary="Today" />
       </ListItemButton>
 
-      <ListItemButton onClick={ () => setInterval('byweek') }>
+      <ListItemButton onClick={ () => setInterval({type: 'lastweek', end: new Date(), begin: new Date()}) }>
         <ListItemIcon>
           <TimelineIcon/>
         </ListItemIcon>
         <ListItemText primary="Last 7 days" />
       </ListItemButton>
 
-       <ListItemButton onClick={ () => setInterval('bymonth') }>
+       <ListItemButton onClick={ () => setInterval({type: 'lastmonth', end: new Date(), begin: new Date()}) }>
         <ListItemIcon>
           <TimelineIcon/>
         </ListItemIcon>
@@ -110,7 +110,7 @@ export const SecondaryListItems = ( {setInterval} ) => {
       </ListItemButton>
       
 
-      <ListItemButton onClick={ () => setInterval('byinterval') }>
+      <ListItemButton onClick={ () => setInterval({type: 'timeslot', end: new Date(), begin: new Date()}) }>
         <ListItemIcon>
           <TimelineIcon/>
         </ListItemIcon>

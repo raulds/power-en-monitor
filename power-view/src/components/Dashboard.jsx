@@ -12,25 +12,51 @@ import axios from 'axios'
     calculate it acording to the belloging meter(s) and the time
     interval.
 */
-export const Dashboard = ( {boardid, boardMeterList} ) => {
+export const Dashboard = ( {boardid, boardMeterList, interval} ) => {
 
     const [boardMeters, setBoardMeters] = React.useState()
+    const [meterData, setMeterData] = React.useState([])
 
     React.useEffect( () => {
-        // lets load all the meters which belogs to this dashboard
+        
+        console.log('selected interval')
+        console.log(interval)
 
-        boardMeterList.forEach(meter => {
+        if (!interval) {
+            console.log('no valid interval defined to fetch and format date into dashboard')
+            return
+        }
+
+
+        let receivedMeterData = []
+        
+        boardMeterList.forEach( async meter => {
+
+            try {
+
+                const res = await axios.post(`http://localhost:3000/meterpw/powerbymeter/${meter.id}`, interval)
+                if( !res.data ) {
+                    console.log('failed to fetcht power meter interval')
+                    return
+                }
+                console.log(res.data)
+
+                receivedMeterData.push({meter: meter.id, data: res.data})
+
+            } catch (err) {
+                console.log(err)
+                console.log('failed to get meter power usage from backend')
+            }
             
         });
+
+        setMeterData(receivedMeterData)
+
+        console.log(meterData)
         
-    }, )
+        
+    }, [interval])
 
-    const generatePowerCards = () => {
-
-        return (
-            <div>Numeric Power cards</div>
-        )
-    }
 
     const pizzaData = [
         { name: 'Cheese', value: 20 },
@@ -89,7 +115,7 @@ export const Dashboard = ( {boardid, boardMeterList} ) => {
 
                 {
                     boardMeterList.map( meter => (
-                        <>
+                        <React.Fragment key={meter.name}>
                         <Grid item>
                             <Cardinfo
                                 title={`Energy Consumed Meter ${meter.name}`}
@@ -106,7 +132,7 @@ export const Dashboard = ( {boardid, boardMeterList} ) => {
                                 timeInterval="Last 24 hours"
                             />
                         </Grid>
-                        </>
+                        </React.Fragment>
                     ))
 
                 }

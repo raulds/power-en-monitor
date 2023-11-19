@@ -14,7 +14,7 @@ password = 'abacate'
 database = 'power_monitor'
 
 # function to create a sample unit
-def generate_metering_sample(meterid):
+def generate_metering_sample(meterid, starttime, pasttime):
     #meterid = 1 
     # Simulate voltage in the range of 110V to 130V
     voltage = round(random.uniform(110, 130), 2)
@@ -34,7 +34,10 @@ def generate_metering_sample(meterid):
     # reactive power
     reactive_power = round(np.sqrt(apparent_power**2 - active_power**2), 2)
 
-    return {'meterId': meterid, 'voltage': voltage, 'current': current, 'power_factor': power_factor, 'apparent_power':apparent_power, 'active_power': active_power, 'reactive_power': reactive_power }
+    # timestamp
+    timestamp = starttime - timedelta(hours=pasttime)
+
+    return {'meterId': meterid, 'voltage': voltage, 'current': current, 'power_factor': power_factor, 'apparent_power':apparent_power, 'active_power': active_power, 'reactive_power': reactive_power, 'createdAt': timestamp }
 
     
     # Calculate power in watts (P = V * I)
@@ -54,10 +57,9 @@ def generate_power_sample(meterid, starttime, pasttime):
                 'power_factor': pf, 'createdAt': timestamp }
 
 
-"""
 power_samples = []
 for past in range(720):
-    sample = generate_power_sample(3, datetime.now(), past)
+    sample = generate_power_sample(2, datetime.now(), past)
     power_samples.append(sample)
     #print(f"Meter: {sample['meterId']}, power:{sample['active_power']}, Factor:{sample['power_factor']}, time:{sample['timestamp']}")
 
@@ -101,14 +103,14 @@ finally:
 """
     
 # Number of samples to generate
-num_samples = 1000
+num_samples = 720 
 energy_samples = []
 
 # Generate and print the samples
-for _ in range(num_samples):
-    sample = generate_metering_sample(3)
+for past in range(num_samples):
+    sample = generate_metering_sample(1, datetime.now(), past)
     energy_samples.append(sample)
-    print(f"Name: {sample['meterId']}, Voltage: {sample['voltage']}V, Current: {sample['current']}A, PF: {sample['power_factor']}W, Apparent Power:{sample['apparent_power']}VA, Active Power: {sample['active_power']}W, Reactive Power: {sample['active_power']}VAR")
+    print(f"Name: {sample['meterId']}, Voltage: {sample['voltage']}V, Current: {sample['current']}A, PF: {sample['power_factor']}W, Apparent Power:{sample['apparent_power']}VA, Active Power: {sample['active_power']}W, Reactive Power: {sample['active_power']}VAR, createdAt:{sample['createdAt']}")
 
 data = pd.DataFrame(energy_samples)
 print(data)
@@ -132,11 +134,11 @@ try:
         cursor = connection.cursor()
 
         # SQL statement to insert energy sample data
-        insert_query = "INSERT INTO samples (voltage, current, power_factor, apparent_power, active_power, reactive_power, meterId, createdAt, updatedAt) VALUES (%s, %s, %s, %s, %s, %s, %s,  NOW(), NOW())"
+        insert_query = "INSERT INTO samples (voltage, current, power_factor, apparent_power, active_power, reactive_power, meterId, createdAt, updatedAt) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())"
 
         # Insert each energy sample into the table
         for sample in energy_samples:
-            data_tuple = (sample['voltage'], sample['current'], sample['power_factor'], sample['apparent_power'], sample['active_power'], sample['reactive_power'], sample['meterId'])
+            data_tuple = (sample['voltage'], sample['current'], sample['power_factor'], sample['apparent_power'], sample['active_power'], sample['reactive_power'], sample['meterId'], sample['createdAt'])
             cursor.execute(insert_query, data_tuple)
             connection.commit()
 
@@ -150,3 +152,5 @@ finally:
         cursor.close()
         connection.close()
         print("MySQL connection is closed.")
+
+"""

@@ -1,9 +1,14 @@
 curl -X POST -H "Content-Type: application/json" -d '{"meterid":"10","interval":"week"}' http://localhost:3000/meterpw/powerdata
 
-curl -X POST -H "Content-Type: application/json" -d '{"meterid":"1","start":{"year":"2023","month":"00","day":"1","hour":"0","minute":"0","sec":"0"}, "end":{"year":"2023","month":"01","day":"4","hour":"23","minute":"59","sec":"59"}}' http://localhost:3000/meterpw/powerdata
+curl -X POST -H "Content-Type: application/json" -d '{"meterid":"1","start":{"year":"2023","month":"10","day":"1","hour":"0","minute":"1","sec":"1"}, "end":{"year":"2023","month":"10","day":"4","hour":"23","minute":"59","sec":"59"}}' http://localhost:3000/meterpw/powerdata
+
+curl -X POST -H "Content-Type: application/json" -d '{"meterid":"1","start":{"year":"2023","month":"10","day":"4","hour":"0","minute":"1","sec":"1"}, "end":{"year":"2023","month":"10","day":"4","hour":"23","minute":"59","sec":"59"}}' http://localhost:3000/meterpw/powerdata
 
 {"year":"2023","month":"1","day":"1","hour":"0","minute":"0","sec":"0"}
 
 {"year":"2023","month":"12","day":"30","hour":"23","minute":"59","sec":"59"}
 
 {"year":"","month":"","day":"","hour":"","minute":"","sec":""}
+
+
+curl -X POST -H "Content-Type: application/json" -d '{"meterid":"1","start":{"year":"2023","month":"10","day":"4","hour":"0","minute":"1","sec":"1"}, "end":{"year":"2023","month":"10","day":"4","hour":"23","minute":"59","sec":"59"}}' http://localhost:3000/meterpw/power

@@ -46,6 +46,7 @@ app.get('/meters', async (req, res) => {
     }
 });
 
+
 app.get('/boards', async (req, res) => {
 
     try {

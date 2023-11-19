@@ -32,7 +32,7 @@ export default function Viewplane() {
   const [energyMeter, setEnergyMeter] = React.useState({/*name:'meter01', id:1*/})
   const [dashboard, setBoard] = React.useState({id:1})
   const [meterList, setMeterList] = React.useState([])
-  const [dataFormat, setDataFormat] = React.useState('')
+  const [dataFormat, setDataFormat] = React.useState({type:'byday', end: new Date()})
   const [view, setView] = React.useState('dashboard')
 
   const toggleDrawer = () => {
@@ -40,10 +40,12 @@ export default function Viewplane() {
   };
 
   const DataView = () => {
+
     if (view === 'dashboard') {
-      return <Dashboard boardid={dashboard.id} boardMeterList={meterList}/>
+      console.log(dataFormat)
+      return <Dashboard boardid={dashboard.id} boardMeterList={meterList} interval={dataFormat}/>
     } else if (view === 'meter') {
-      return <Meterview energyMeter={energyMeter} />          
+      return <Meterview energyMeter={energyMeter} />
     }
   }
 
@@ -73,7 +75,7 @@ export default function Viewplane() {
               color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}>
-              Dashboard / {energyMeter.name} / Reads {dataFormat}
+              Dashboard / {energyMeter.name} / Reads {dataFormat.type}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -97,9 +99,10 @@ export default function Viewplane() {
           <List component="nav">
               <Boardlist setMainBoard={setBoard} setView={setView}/>
             <Divider sx={{ my: 1 }} />
-              <MeterList boardId={dashboard.id} boardMeterList={setMeterList} setMeterSource={setEnergyMeter} setView={setView} />
+              <MeterList boardId={dashboard.id} boardMeterList={setMeterList}
+                          setMeterSource={setEnergyMeter} setView={setView} />
             <Divider sx={{ my: 1 }} />
-              <SecondaryListItems setInterval={setDataFormat} />
+              <SecondaryListItems setInterval={setDataFormat}/>
             
           </List>
         </Drawer>
