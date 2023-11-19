@@ -5,24 +5,26 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 
-const Cardinfo = ({ title, meter, unit, timeInterval }) => {
+const CardPwTotal = ({ title, board, unit, timeInterval }) => {
 
-  const [meterData, setMeterData] = React.useState({})
+  const [boardPower, setBoardPower] = React.useState({})
 
   React.useEffect( () => {
 
-    if (!meter || !timeInterval) {
+    console.log('----BoardId----')
+    console.log(board)
+    if (!board || !timeInterval) {
       console.log('no valid meter or interval')
       return
     }
-        axios.post(`http://localhost:3000/meterpw/powerbymeter/${meter}`, timeInterval).then ( res => {
+        axios.post(`http://localhost:3000/meterpw/powerbyboard/${board}`, timeInterval).then ( res => {
 
           if( !res.data && res.data.err == false) {
             console.log('failed to fetch power meter interval')
             return
           }
           // saving the meter data fetch from database as a state
-          setMeterData(res.data.meterdata)
+          setBoardPower(res.data.meterdata)
         }).catch(err => {
           console.log(err)
           console.log('failed to fetch card info')
@@ -42,7 +44,7 @@ const Cardinfo = ({ title, meter, unit, timeInterval }) => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h4" component="div">
-              { parseFloat( meterData.active_power / 1000).toFixed(2)}
+              { parseFloat( boardPower.active_power / 1000).toFixed(2)}
               <Typography variant="subtitle1" component="span" color="textSecondary">
                 {unit}
               </Typography>
@@ -59,4 +61,4 @@ const Cardinfo = ({ title, meter, unit, timeInterval }) => {
   );
 };
 
-export default Cardinfo;
+export default CardPwTotal;
