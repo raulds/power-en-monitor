@@ -18,8 +18,8 @@ const ActivePowerGraph = ({meter, format}) => {
         axios.get(`http://localhost:3000/samples/actpower/${meter}`).then ( res => {
           setPowerSamples(res.data)
         }).catch(error => {
-          console.log(error)
-          console.log('failed to fetch voltage samples')
+          //console.log(error)
+          //console.log('failed to fetch voltage samples')
         })
     }, [meter])
     

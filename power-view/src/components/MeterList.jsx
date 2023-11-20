@@ -23,7 +23,7 @@ const MeterList = ({boardId, setMeterSource, setView, boardMeterList}) => {
       });
       boardMeterList(meterlist) 
       setMeterList(meterlist)
-      console.log(meterlist)
+     // console.log(meterlist)
     }).catch(error => {
       console.log(error)
       console.log('failed to fetch meter list')
@@ -31,7 +31,7 @@ const MeterList = ({boardId, setMeterSource, setView, boardMeterList}) => {
   }, [boardId])
 
   const handleClcik = (meter) => {
-    console.log(meter.name)
+    //onsole.log(meter.name)
     setView('meter')
     setMeterSource(meter)
   }

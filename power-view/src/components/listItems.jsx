@@ -28,16 +28,16 @@ export const ListRegisteredMeters = () => {
   useEffect( () => {
     axios.get('http://localhost:3000/meters').then ( res => {
       setEnergyMeters(meterlist)
-      console.log(res.data)
+      //console.log(res.data)
     }).catch(error => {
       setEnergyMeters(['meters unavailable'])
-      console.log(energyMeters)
-      console.log('failed to fetch meter list')
+      //console.log(energyMeters)
+      //console.log('failed to fetch meter list')
     })
   })
 
-  console.log('METER LIST')
-  console.log(energyMeters)
+  //console.log('METER LIST')
+  //console.log(energyMeters)
   if (energyMeters.length == 0) {
     console.log('NOT POSSIBLE TO FETCH METERS FROM DATABASE')
     return (

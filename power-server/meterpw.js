@@ -216,9 +216,11 @@ router.post('/dailypowerdata/:meterId', async (req, res) => {
         idatebegin.setHours(0,0,0,0)
         idateend.setHours(23, 59, 59, 999)
 
+        /*
         console.log('---date baoundaries---')
         console.log(idatebegin)
         console.log(idateend)
+        */
         
         let powerdata = await Powerdot.findAll({
             where: {
@@ -231,7 +233,7 @@ router.post('/dailypowerdata/:meterId', async (req, res) => {
 
         activepower = 0
         for ( const power of powerdata) {
-            console.log(power.active_power)
+           // console.log(power.active_power)
             activepower += power.active_power
         }
 
@@ -256,6 +258,154 @@ router.post('/dailypowerdata/:meterId', async (req, res) => {
     })
 })
 
+
+
+async function getPowerOfTimeInterval (meterid, idatebegin, idateend) {
+
+    let powerdata = await Powerdot.findAll({
+        where: {
+            meterId: meterid,
+            createdAt : {
+                [Op.between]: [idatebegin, idateend]
+            }
+        }
+    })
+
+    let activepower = 0
+
+    for ( const power of powerdata) {
+        console.log(power.active_power)
+        activepower += power.active_power
+    }
+
+    return activepower;
+}
+
+async function getWindowPowerTotal (meterId, idate)
+{
+    
+        let idatebegin = new Date(idate)
+        let idateend = new Date(idate)
+        idatebegin.setHours(0, 0, 0, 0)
+        idateend.setHours(17, 59, 59, 999)
+        
+        let common_power = await getPowerOfTimeInterval(meterId, idatebegin, idateend)
+        console.log('common power')
+        console.log(common_power)
+        
+        // first intermdiate slot
+        idatebegin.setHours(18, 0, 0, 000)
+        idateend.setHours(18, 59, 59, 999)
+        
+        let inter_power = await getPowerOfTimeInterval(meterId, idatebegin, idateend)
+        console.log('inter_power')
+        console.log(inter_power)
+        
+        // spot time slot
+        idatebegin.setHours(19, 0, 0, 000)
+        idateend.setHours(21, 59, 59, 999)
+
+        let spot_power = await getPowerOfTimeInterval(meterId, idatebegin, idateend)
+        console.log('spot power')
+        console.log(spot_power)
+
+        idatebegin.setHours(22,0,0,0)
+        idateend.setHours(23, 59, 59, 999)
+        
+        common_power += await getPowerOfTimeInterval(meterId, idatebegin, idateend)
+
+        console.log('commong power again')
+        console.log(common_power)
+
+        common_power = common_power/1000
+        inter_power = inter_power/1000
+        spot_power = spot_power/1000
+
+        return {inter_power, common_power, spot_power}
+
+}
+
+router.post('/powerslots/:meterId', async (req, res) => {
+    const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    const foundmeters = await Meter.findAll( {where: { id : meterid}});
+
+    if (!(foundmeters.length > 0)) {
+        console.log('no meter found')
+        res.json({err: true, msg: 'the selected meter does not exist in the database'})
+    }
+
+    switch(type) {
+        case 'today':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
+    // plate variables
+    let idate = new Date(endDate) 
+
+    let idatebegin = new Date(idate);
+    let idateend = new Date(idate);
+
+    let common_power = 0 
+    let inter_power = 0
+    let spot_power = 0
+    let result = {}
+
+    console.log('starting date iteration for power slots')
+    // iterating over days
+    while (idate > startDate) {
+
+        result = await getWindowPowerTotal(meterid, idate)
+
+        console.log(result)
+
+        common_power += result.common_power
+        inter_power += result.inter_power
+        spot_power += result.spot_power
+        
+        // iterating over date range 
+        idate.setDate(idate.getDate() - 1)
+    }
+
+    console.log('----power results----')
+    console.log(common_power)
+    console.log(inter_power)
+    console.log(spot_power)
+
+    res.json({
+        err: false,
+        message: 'default response',
+        meterId: meterid,
+        powerslots: [
+            {name: 'fora de ponta', value: common_power},
+            {name: 'intermediario', value: inter_power},
+            {name: 'ponta', value: spot_power}
+        ] 
+    })
+})
 
 router.post('/powerbyboard/:boardId', async (req, res) => {
 
@@ -322,7 +472,7 @@ router.post('/powerbyboard/:boardId', async (req, res) => {
             }
         })
         
-        console.log(powerdata[0])
+        //console.log(powerdata[0])
 
         powerdata.forEach( sample => {
             activepower += sample.active_power
@@ -362,12 +512,14 @@ router.post('/boardpowerpercent/:boardId', async (req, res) => {
     let startDate = new Date(begin)
     let endDate = new Date(end)
 
+    /*
     console.log('-----------------------')
     console.log(boardid, type)
     console.log('-----------------------')
     console.log(startDate)
     console.log(endDate)
     console.log('-----------------------')
+    */
     
     const foundmeters = await Meter.findAll( {where: { dashboardId : boardid}});
 
@@ -418,7 +570,7 @@ router.post('/boardpowerpercent/:boardId', async (req, res) => {
             }
         })
         
-        console.log(powerdata[0])
+        //console.log(powerdata[0])
 
         activepower = 0
         reactivepower = 0
@@ -443,9 +595,11 @@ router.post('/boardpowerpercent/:boardId', async (req, res) => {
     //})
     }
     
+    /*
     console.log('----')
     console.log(powerbymeter)
     console.log('----')
+    */
 
 
     res.json({

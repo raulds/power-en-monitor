@@ -21,21 +21,21 @@ const Legend = ({ data, colors }) => (
   </ul>
 );
 
-const CardPizzaGraph = ({ board, tittle, timeInterval }) => {
-  const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#BF6384', '#FA6384'];
+const CardPizzaPowerSlots = ({ meter, tittle, timeInterval, chargeModel }) => {
+  const COLORS = ['#6eaa5e', '#FFCE56', '#FF6384', '#4CAF50', '#BF6384', '#FA6384'];
 
   const [powerArray, setPowerArray] = React.useState([])
 
   React.useEffect( () => {
 
-    //console.log('----BoardId----')
-    //console.log(board)
+    //console.log('----meterid----')
+    //console.log(meter)
 
-    if (!board || !timeInterval) {
+    if (!meter || !timeInterval) {
       console.log('no valid meter or interval')
       return
     }
-        axios.post(`http://localhost:3000/meterpw/boardpowerpercent/${board}`, timeInterval).then ( res => {
+        axios.post(`http://localhost:3000/meterpw/powerslots/${meter}`, timeInterval).then ( res => {
 
           if( !res.data && res.data.err == false) {
             console.log('failed to fetch power meter interval')
@@ -43,9 +43,12 @@ const CardPizzaGraph = ({ board, tittle, timeInterval }) => {
           }
           // saving the meter data fetch from database as a state
 
-          //console.log(res.data)
-          setPowerArray(res.data.powerbymeter)
+          ('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+          console.log(res.data)
+          setPowerArray(res.data.powerslots)
           console.log(powerArray)
+
+          console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 
         }).catch(err => {
           console.log(err)
@@ -94,4 +97,4 @@ const CardPizzaGraph = ({ board, tittle, timeInterval }) => {
 
   )};
 
-export default CardPizzaGraph;
+export default CardPizzaPowerSlots;

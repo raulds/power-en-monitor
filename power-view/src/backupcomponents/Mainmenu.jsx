@@ -41,7 +41,7 @@ export default class Mainmenu extends React.Component {
         this.props.updateContent('LISTUSER')
     }
     setPageNewPat() {
-        console.log('newpat')
+        //console.log('newpat')
         this.props.updateContent('NEWPAT')
     }
     setPageListPat() {
@@ -114,7 +114,7 @@ export default class Mainmenu extends React.Component {
             menustate: menustate 
         })
 
-        console.log(this.state)
+        //console.log(this.state)
     }
 
     render () {

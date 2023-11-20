@@ -24,9 +24,9 @@ const CardBarGraphDaily = ({ title, meter, unit, timeInterval }) => {
         return
       }
       setData(res.data.meterdata)
-      console.log('meter data')
-      console.log(data)
-      console.log(res.data.meterdata)
+      //console.log('meter data')
+      //console.log(data)
+      //console.log(res.data.meterdata)
     }).catch(err => {
       console.log(err)
       console.log('failed to fetch card info')

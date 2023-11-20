@@ -12,8 +12,8 @@ const CardPwTotal = ({ title, board, unit, timeInterval, chargeModel }) => {
 
   React.useEffect( () => {
 
-    console.log('----BoardId----')
-    console.log(board)
+   // console.log('----BoardId----')
+    //console.log(board)
     if (!board || !timeInterval) {
       console.log('no valid meter or interval')
       return
@@ -39,9 +39,8 @@ const CardPwTotal = ({ title, board, unit, timeInterval, chargeModel }) => {
 
     if (chargeModel.TY === 0){
          setCost(((boardPower.active_power * chargeModel.TE) + (boardPower.active_power * chargeModel.TUSD))/1000)
-         console.log('-cost-')
-         console.log(cost)
-
+         //console.log('-cost-')
+         //console.log(cost)
     }
      return (
          <div>R$ {cost}</div>

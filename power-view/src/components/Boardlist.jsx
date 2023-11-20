@@ -16,7 +16,7 @@ const Boardlist = ({setMainBoard, setView}) => {
     axios.get('http://localhost:3000/boards').then ( res => {
       setDashboards(res.data)
       setMainBoard(res.data[0])
-      console.log(res.data[0])
+      //console.log(res.data[0])
     }).catch(error => {
       console.log(error)
       console.log('failed to fetch meter list')
@@ -24,7 +24,7 @@ const Boardlist = ({setMainBoard, setView}) => {
   }, [])
 
   const handleClcik = (board) => {
-    console.log(board)
+    //console.log(board)
     setView('dashboard')
     setMainBoard(board)
   }

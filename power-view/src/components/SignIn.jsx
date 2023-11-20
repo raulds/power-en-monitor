@@ -35,7 +35,7 @@ export default class SignIn extends React.Component {
             return
         }
 
-        console.log(res.data)
+        //console.log(res.data)
         // authenticatin sucess
         if(!res.data.err){
           this.props.setAuthStatus(true)

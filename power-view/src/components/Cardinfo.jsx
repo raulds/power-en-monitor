@@ -35,8 +35,8 @@ const Cardinfo = ({ title, meter, unit, timeInterval, chargeModel }) => {
 
     if (chargeModel.TY === 0){
          setCost(((meterData.active_power * chargeModel.TE) + (meterData.active_power * chargeModel.TUSD))/1000)
-         console.log('-cost-')
-         console.log(cost)
+        // console.log('-cost-')
+         //console.log(cost)
     }
      return (
          <div>R$ {cost}</div>
