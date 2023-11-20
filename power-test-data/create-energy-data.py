@@ -59,7 +59,7 @@ def generate_power_sample(meterid, starttime, pasttime):
 
 power_samples = []
 for past in range(720):
-    sample = generate_power_sample(3, datetime.now(), past)
+    sample = generate_power_sample(1, datetime.now(), past)
     power_samples.append(sample)
     #print(f"Meter: {sample['meterId']}, power:{sample['active_power']}, Factor:{sample['power_factor']}, time:{sample['timestamp']}")
 

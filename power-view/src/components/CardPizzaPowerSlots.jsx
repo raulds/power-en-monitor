@@ -22,9 +22,56 @@ const Legend = ({ data, colors }) => (
 );
 
 const CardPizzaPowerSlots = ({ meter, tittle, timeInterval, chargeModel }) => {
-  const COLORS = ['#6eaa5e', '#FFCE56', '#FF6384', '#4CAF50', '#BF6384', '#FA6384'];
+  const COLORS = ['#6EAA5E', '#FFCE56', '#FF6384', '#4CAF50', '#BF6384', '#FA6384'];
 
   const [powerArray, setPowerArray] = React.useState([])
+  const [minCost, setMinCost] = React.useState()
+  const [intCost, setIntCost] = React.useState()
+  const [spotCost, setSpotCost] = React.useState()
+
+  const TotalPower = () => {
+    let total = 0
+    powerArray.forEach (power => {
+        total += power.value
+    })
+    return <div>{total}</div>
+  }
+
+  const CalcCharge = () => {
+
+    let cost = 0
+    powerArray.forEach ( power => {
+        cost = 0
+        if (power.name == 'fora de ponta') {
+            cost = (0.36989*power.value) + (0.30988*power.value) 
+            setMinCost(cost)
+        } else if (power.name == 'intermediario') {
+            cost = (0.36989*power.value) + (0.59272*power.value) 
+            setIntCost(cost)
+        } else if (power.name == 'ponta') {
+            cost = (0.57965*power.value) + (0.87557*power.value) 
+            setSpotCost(cost)
+        }
+    })
+
+    return (
+        <div>
+            <div>
+                Fora de Ponta
+                R$ {minCost}
+            </div>
+            <div>
+                Intermediario
+                R$ {intCost}
+            </div>
+            <div>
+                Ponta
+                R$ {spotCost}
+            </div>
+        </div>
+    )
+
+  }
 
   React.useEffect( () => {
 
@@ -58,7 +105,7 @@ const CardPizzaPowerSlots = ({ meter, tittle, timeInterval, chargeModel }) => {
   }, [timeInterval])
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" >
         <CardContent>
             <Grid container >
               <Grid item xs={12}>
@@ -66,7 +113,8 @@ const CardPizzaPowerSlots = ({ meter, tittle, timeInterval, chargeModel }) => {
                   {tittle}
                 </Typography>
               </Grid>
-              <Grid item xs={12} >
+
+              <Grid item xs={6} >
                 <PieChart width={400} height={400}>
                     <Pie
                       dataKey="value"
@@ -86,12 +134,23 @@ const CardPizzaPowerSlots = ({ meter, tittle, timeInterval, chargeModel }) => {
                 </PieChart>
                 <Legend data={powerArray} colors={COLORS}/>
               </Grid>
+
+              <Grid item xs={6}>
+              <Typography variant="h6" component="div">
+                      Estimated Charge
+                    <TotalPower/>                   
+              </Typography>
+              <Typography variant="h6" component="div">
+                    <CalcCharge/>
+              </Typography>
+              </Grid>
+            </Grid>
+
               <Grid item xs={12}>
                 <Typography variant="body2" color="textSecondary">
                   {`for ${timeInterval.type}`}
                 </Typography>
               </Grid>
-            </Grid>
         </CardContent>
     </Card>
 
