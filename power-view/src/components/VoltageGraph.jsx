@@ -33,12 +33,12 @@ const VoltageGraph = ({meter, interval}) => {
     const yMax = height - margin.top - margin.bottom;
 
     voltagesamples.forEach( sample => {
-      sample.updatedAt = new Date(sample.updatedAt)
+      sample.createdAt = new Date(sample.createdAt)
     })
     const xxScale = scaleTime(
       {
-        domain: [ Math.min(...voltagesamples.map(d => d.updatedAt)),
-                  Math.max(...voltagesamples.map(d => d.updatedAt))],
+        domain: [ Math.min(...voltagesamples.map(d => d.createdAt)),
+                  Math.max(...voltagesamples.map(d => d.createdAt))],
         range: [0, xMax],
       });
     const yyScale = scaleLinear({
@@ -61,7 +61,7 @@ const VoltageGraph = ({meter, interval}) => {
 
         <AreaClosed
           data={voltagesamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.voltage)}
           yScale={yyScale}
           fill={"url(#gradient)"}
@@ -71,7 +71,7 @@ const VoltageGraph = ({meter, interval}) => {
         {/* Line Path (optional) */}
         <LinePath
           data={voltagesamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.voltage)}
           stroke="#007acc"
           strokeWidth={1}

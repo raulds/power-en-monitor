@@ -8,31 +8,31 @@ import { LinearGradient } from '@vx/gradient';
 
 import axios from 'axios'
 
-const CurrentGraph = ({meter, format, refWid, refHei}) => {
+const CurrentGraph = ({meter, interval, refWid, refHei}) => {
     const [currentSamples, setCurrentSamples] = React.useState([])
     const [width, setWidth] = React.useState(500)
     const [height, setHeight] = React.useState(400)
 
     React.useEffect( () => {
-        axios.get(`http://localhost:3000/samples/current/${meter}`).then ( res => {
+        axios.post(`http://localhost:3000/samples/current/${meter}`, interval).then ( res => {
           setCurrentSamples(res.data)
         }).catch(error => {
           console.log(error)
           console.log('failed to fetch voltage samples')
         })
-    }, [meter])
+    }, [interval, meter])
     
     const margin = { top: 20, right: 20, bottom: 40, left: 40 };
     const xMax = width - margin.left - margin.right;
     const yMax = height - margin.top - margin.bottom;
 
     currentSamples.forEach( sample => {
-      sample.updatedAt = new Date(sample.updatedAt)
+      sample.createdAt = new Date(sample.createdAt)
     })
     const xxScale = scaleTime(
       {
-        domain: [ Math.min(...currentSamples.map(d => d.updatedAt)),
-                  Math.max(...currentSamples.map(d => d.updatedAt))],
+        domain: [ Math.min(...currentSamples.map(d => d.createdAt)),
+                  Math.max(...currentSamples.map(d => d.createdAt))],
         range: [0, xMax],
       });
     const yyScale = scaleLinear({
@@ -51,7 +51,7 @@ const CurrentGraph = ({meter, format, refWid, refHei}) => {
 
         <AreaClosed
           data={currentSamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.current)}
           yScale={yyScale}
           fill={"url(#gradient)"}
@@ -60,7 +60,7 @@ const CurrentGraph = ({meter, format, refWid, refHei}) => {
         {/* Line Path (optional) */}
         <LinePath
           data={currentSamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.current)}
           stroke="#007acc"
           strokeWidth={1}

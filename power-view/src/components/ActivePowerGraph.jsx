@@ -8,32 +8,32 @@ import { LinearGradient } from '@vx/gradient';
 
 import axios from 'axios'
 
-const ActivePowerGraph = ({meter, format}) => {
+const ActivePowerGraph = ({meter, interval}) => {
 
     const [powerSamples, setPowerSamples] = React.useState([])
     const [width, setWidth] = React.useState(1050)
     const [height, setHeight] = React.useState(400)
 
     React.useEffect( () => {
-        axios.get(`http://localhost:3000/samples/actpower/${meter}`).then ( res => {
+        axios.post(`http://localhost:3000/samples/actpower/${meter}`, interval).then ( res => {
           setPowerSamples(res.data)
         }).catch(error => {
           //console.log(error)
           //console.log('failed to fetch voltage samples')
         })
-    }, [meter])
+    }, [interval, meter])
     
     const margin = { top: 20, right: 20, bottom: 40, left: 40 };
     const xMax = width - margin.left - margin.right;
     const yMax = height - margin.top - margin.bottom;
 
     powerSamples.forEach( sample => {
-      sample.updatedAt = new Date(sample.updatedAt)
+      sample.createdAt = new Date(sample.createdAt)
     })
     const xxScale = scaleTime(
       {
-        domain: [ Math.min(...powerSamples.map(d => d.updatedAt)),
-                  Math.max(...powerSamples.map(d => d.updatedAt))],
+        domain: [ Math.min(...powerSamples.map(d => d.createdAt)),
+                  Math.max(...powerSamples.map(d => d.createdAt))],
         range: [0, xMax],
       });
     const yyScale = scaleLinear({
@@ -49,7 +49,7 @@ const ActivePowerGraph = ({meter, format}) => {
 
         <AreaClosed
           data={powerSamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.active_power)}
           yScale={yyScale}
           fill={"url(#gradient)"}
@@ -57,7 +57,7 @@ const ActivePowerGraph = ({meter, format}) => {
 
         <LinePath
           data={powerSamples}
-          x={d => xxScale(d.updatedAt)}
+          x={d => xxScale(d.createdAt)}
           y={d => yyScale(d.active_power)}
           stroke="#007acc"
           strokeWidth={1}

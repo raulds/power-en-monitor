@@ -117,7 +117,7 @@ app.post('/samples/voltage/:meterId', async (req, res) => {
                 createdAt: {
                     [Op.between]: [startDate, endDate]
                 }
-            }, attributes: ['updatedAt', 'voltage']});
+            }, attributes: ['createdAt', 'voltage']});
 
         res.json(samples)
     } catch (error) {
@@ -126,11 +126,50 @@ app.post('/samples/voltage/:meterId', async (req, res) => {
     }
 });
 
-app.get('/samples/current/:meterId', async (req, res) => {
+app.post('/samples/current/:meterId', async (req, res) => {
     const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+    ///////// original
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
     try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'current']});
+        const samples = await Samples.findAll({
+            where: {
+                meterId: meterid,
+                createdAt : {
+                    [Op.between]: [startDate, endDate]
+                }
+            },
+            attributes: ['createdAt', 'current']});
         res.json(samples)
     } catch (error) {
         console.log(error)
@@ -138,11 +177,101 @@ app.get('/samples/current/:meterId', async (req, res) => {
     }
 });
 
-app.get('/samples/powerfct/:meterId', async (req, res) => {
+app.post('/samples/powerfct/:meterId', async (req, res) => {
     const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+    ///////// original
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
+        try {
+            const samples = await Samples.findAll({
+                    where: {
+                    meterId: meterid,
+                    createdAt : {
+                        [Op.between]: [startDate, endDate]
+                    }
+                },
+                attributes: ['createdAt', 'power_factor']});
+            res.json(samples)
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message:'failed to get samples from meter' })
+        }
+    }
+);
+
+app.post('/samples/actpower/:meterId', async (req, res) => {
+    const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+    ///////// original
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
     try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'power_factor']});
+        const samples = await Samples.findAll({ 
+            where: {
+                    meterId: meterid,
+                    createdAt : {
+                        [Op.between]: [startDate, endDate]
+                    }
+                },
+            attributes: ['createdAt', 'active_power']});
         res.json(samples)
     } catch (error) {
         console.log(error)
@@ -150,11 +279,49 @@ app.get('/samples/powerfct/:meterId', async (req, res) => {
     }
 });
 
-app.get('/samples/actpower/:meterId', async (req, res) => {
+app.post('/samples/rctpower/:meterId', async (req, res) => {
     const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+    ///////// original
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
     try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'active_power']});
+        const samples = await Samples.findAll({
+                where: {
+                    meterId: meterid,
+                    createdAt : {
+                        [Op.between]: [startDate, endDate]
+                    }
+                },
+            attributes: ['createdAt', 'reactive_power']});
         res.json(samples)
     } catch (error) {
         console.log(error)
@@ -162,23 +329,49 @@ app.get('/samples/actpower/:meterId', async (req, res) => {
     }
 });
 
-app.get('/samples/rctpower/:meterId', async (req, res) => {
+app.post('/samples/apppower/:meterId', async (req, res) => {
     const meterid = req.params.meterId
-    try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'reactive_power']});
-        res.json(samples)
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message:'failed to get samples from meter' })
-    }
-});
+    const { type, end, begin } = req.body
+    ///////// original
 
-app.get('/samples/apppower/:meterId', async (req, res) => {
-    const meterid = req.params.meterId
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
     try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'apparent_power']});
+        const samples = await Samples.findAll({
+                where: {
+                    meterId: meterid,
+                    createdAt : {
+                        [Op.between]: [startDate, endDate]
+                    }
+                },
+            attributes: ['createdAt', 'apparent_power']});
         res.json(samples)
     } catch (error) {
         console.log(error)
