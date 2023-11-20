@@ -1,23 +1,79 @@
 [
     {
-        "name": "virtMeter",
+        "name": "virtMeter_A",
         "meterkey": null,
         "metertype": "virtual",
         "metermodel": "python-source",
         "dashboardId": 1
     },
     {
-        "name": "TuyaVirtMeter",
+        "name": "TuyaVirtMeter_B",
         "meterkey": "vdevo169560839264911",
         "metertype": "virtual",
         "metermodel": "vdevo",
-        "dashboardId": 1
+        "dashboardId": 2
     },
     {
-        "name": "TuyaDevice",
+        "name": "TuyaDevice_C",
         "meterkey": null,
         "metertype": "device",
         "metermodel": "",
         "dashboardId": 2
+    },
+    {
+        "name": "virtMeter_D",
+        "meterkey": null,
+        "metertype": "virtual",
+        "metermodel": "python-source",
+        "dashboardId": 2
+    },
+    {
+        "name": "TuyaVirtMeter_E",
+        "meterkey": "vdevo169560839264911",
+        "metertype": "virtual",
+        "metermodel": "vdevo",
+        "dashboardId": 2
+    },
+    {
+        "name": "TuyaDevice_F",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
+    },
+    {
+        "name": "TuyaDevice_G",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
+    },
+    {
+        "name": "TuyaDevice_H",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
+    },
+    {
+        "name": "TuyaDevice_I",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
+    },
+    {
+        "name": "TuyaDevice_J",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
+    },
+    {
+        "name": "TuyaDevice_M",
+        "meterkey": null,
+        "metertype": "device",
+        "metermodel": "",
+        "dashboardId": 3
     }
 ]

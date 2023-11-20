@@ -6,5 +6,9 @@
     {
         "name": "PucBuilding",
         "description": "Virtual PUC block building"
+    },
+    {
+        "name": "Industry",
+        "description": "Virtual Meters associated to industry profile"
     }
 ]

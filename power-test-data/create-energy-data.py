@@ -49,7 +49,7 @@ def generate_power_sample(meterid, starttime, pasttime):
     # considering 36 average power factor per hour
     # generating one input from meter having active power and power factor
     
-    power = round(random.uniform(100, 2000), 2)
+    power = round(random.uniform(100, 10000), 2)
     pf = round(random.uniform(0.89, 0.99), 2)
     timestamp = starttime - timedelta(hours=pasttime)
 
@@ -59,7 +59,7 @@ def generate_power_sample(meterid, starttime, pasttime):
 
 power_samples = []
 for past in range(720):
-    sample = generate_power_sample(1, datetime.now(), past)
+    sample = generate_power_sample(11, datetime.now(), past)
     power_samples.append(sample)
     #print(f"Meter: {sample['meterId']}, power:{sample['active_power']}, Factor:{sample['power_factor']}, time:{sample['timestamp']}")
 

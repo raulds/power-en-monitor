@@ -1,14 +1,32 @@
-const { Meter, Samples, Users, Dashboard} = require('./Model')
+const { Meter, Samples, Powerdot, Users, Dashboard, connection} = require('./Model')
 const fsHandler = require('fs')
 
 main()
 
 async function main () {
 
-    //await Samples.destroy({truncate: {cascade:true}})
-    //await Meter.destroy({truncate: {cascade:true}})
-    //let query = 'ALTER TABLE meters AUTO_INCREMENT=1'
-    //await connection.query(query, {plain: false, raw: false})
+    /*
+    await Samples.destroy({truncate: {cascade:true}})
+    await Powerdot.destroy({truncate: {cascade:true}})
+    await Dashboard.destroy({truncate: {cascade:true}})
+    await Meter.destroy({truncate: {cascade:true}})
+    */
+
+    /*
+    let query = 'ALTER TABLE meters AUTO_INCREMENT=1'
+    await connection.query(query, {plain: false, raw: false})
+
+    query = 'ALTER TABLE samples AUTO_INCREMENT=1'
+    await connection.query(query, {plain: false, raw: false})
+
+    query = 'ALTER TABLE powerdots AUTO_INCREMENT=1'
+    await connection.query(query, {plain: false, raw: false})
+
+    query = 'ALTER TABLE dashboards AUTO_INCREMENT=1'
+    await connection.query(query, {plain: false, raw: false})
+    */
+
+
 
     /*
     let rawdata = await fsHandler.readFileSync('./userdata.json')
