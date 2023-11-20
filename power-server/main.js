@@ -6,6 +6,9 @@ const port = 3000;
 const axios = require('axios')
 const crypto = require('crypto')
 
+const { Sequelize } = require('sequelize')
+const { Op } = Sequelize
+
 const { Meter, Samples, Users, Dashboard } = require('./Model')
 
 const userRoute = require('./userRoute');
@@ -71,11 +74,51 @@ app.get('/samples/:meterId', async (req, res) => {
     }
 });
 
-app.get('/samples/voltage/:meterId', async (req, res) => {
+app.post('/samples/voltage/:meterId', async (req, res) => {
     const meterid = req.params.meterId
+    const { type, end, begin } = req.body
+    ///////// original
+
+    let startDate = new Date(begin)
+    let endDate = new Date(end)
+
+    switch(type) {
+        case 'today':
+            console.log('testing today voltage grapg')
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+            console.log(end)
+            console.log(begin)
+        break
+
+        case 'lastweek':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 7)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'lastmonth':
+            endDate.setHours(23, 59, 59, 999)
+            startDate.setDate(endDate.getDate() - 30)
+            startDate.setHours(0, 0, 0, 0)
+        break;
+
+        case 'timeslot':
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+        break;
+    }
+
+    //////// original
     try {
-        const samples = await Samples.findAll({ where: {meterId: meterid },
-            attributes: ['updatedAt', 'voltage']});
+        const samples = await Samples.findAll({
+            where: {
+                meterId: meterid,
+                createdAt: {
+                    [Op.between]: [startDate, endDate]
+                }
+            }, attributes: ['updatedAt', 'voltage']});
+
         res.json(samples)
     } catch (error) {
         console.log(error)

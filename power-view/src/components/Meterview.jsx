@@ -12,7 +12,7 @@ import PowerFactorGraph from "./PowerFactorGraph";
 import ReactivePowerGraph from "./ReactivePowerGraph";
 
 
-export const Meterview = ({energyMeter}) => {
+export const Meterview = ({energyMeter, interval}) => {
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -28,7 +28,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Voltage Monitor
-                  <VoltageGraph meter={energyMeter.id} />
+                  <VoltageGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
 
@@ -42,7 +42,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Current Monitor
-                  <CurrentGraph meter={energyMeter.id}/>
+                  <CurrentGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
 
@@ -56,7 +56,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Power Factor 
-                  <PowerFactorGraph meter={energyMeter.id}/>
+                  <PowerFactorGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
 
@@ -70,7 +70,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Active Power Monitor 
-                  <ActivePowerGraph meter={energyMeter.id}/>
+                  <ActivePowerGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
 
@@ -84,7 +84,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Apparent Power Monitor 
-                  <ApparentPowerGraph meter={energyMeter.id}/>
+                  <ApparentPowerGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
               
@@ -98,7 +98,7 @@ export const Meterview = ({energyMeter}) => {
                     width: 'auto'
                   }}>
                   Reactive Power Monitor 
-                  <ReactivePowerGraph meter={energyMeter.id}/>
+                  <ReactivePowerGraph meter={energyMeter.id} interval={interval}/>
                 </Paper>
               </Grid>
 

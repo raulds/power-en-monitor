@@ -45,7 +45,7 @@ export default function Viewplane() {
       console.log(dataFormat)
       return <Dashboard boardid={dashboard.id} boardMeterList={meterList} interval={dataFormat}/>
     } else if (view === 'meter') {
-      return <Meterview energyMeter={energyMeter} />
+      return <Meterview energyMeter={energyMeter} interval={dataFormat}/>
     }
   }
 

@@ -10,22 +10,23 @@ import { localPoint } from '@vx/event';
 import axios from 'axios'
 import { colors } from '@mui/material';
 
-const VoltageGraph = ({meter, format}) => {
+const VoltageGraph = ({meter, interval}) => {
     const [voltagesamples, setVSamples] = React.useState([])
     const [width, setWidth] = React.useState(500)
     const [height, setHeight] = React.useState(400)
 
     React.useEffect( () => {
-      console.log('goning to fetch voltage data - debug message')
-        axios.get(`http://localhost:3000/samples/voltage/${meter}`).then ( res => {
-          console.log(`http://localhost:3000/samples/voltage/${meter}`)
+        axios.post(`http://localhost:3000/samples/voltage/${meter}`, interval).then ( res => {
+          console.log('-----')
+          console.log(interval)
           setVSamples(res.data)
           console.log(res.data)
+
         }).catch(error => {
           console.log(error)
           console.log('failed to fetch voltage samples')
         })
-    },[meter])
+    },[interval, meter])
     
     const margin = { top: 20, right: 20, bottom: 40, left: 40 };
     const xMax = width - margin.left - margin.right;
@@ -48,8 +49,6 @@ const VoltageGraph = ({meter, format}) => {
     const handleMouseOver = (event, d) => {
       const coords = localPoint(event.target.ownerSVGElement, event);
       const x = xxScale.invert(coords.x);
-      console.log(x)
-      console.log(d)
     }
   return (
     <svg width={width} height={height}>
