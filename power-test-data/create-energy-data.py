@@ -17,13 +17,13 @@ database = 'power_monitor'
 def generate_metering_sample(meterid, starttime, pasttime):
     #meterid = 1 
     # Simulate voltage in the range of 110V to 130V
-    voltage = round(random.uniform(110, 130), 2)
+    voltage = round(random.uniform(219, 225), 2)
     
     # Simulate current in the range of 5A to 20A
-    current = round(random.uniform(5, 20), 2)
+    current = round(random.uniform(5, 100), 2)
 
     # power factor 
-    power_factor = round(random.uniform(0.7, 0.99), 2)
+    power_factor = round(random.uniform(0.70, 0.99), 2)
 
     # aparent power
     apparent_power = round(voltage * current, 2)
@@ -59,7 +59,9 @@ def generate_power_sample(meterid, starttime, pasttime):
 
 power_samples = []
 for past in range(720):
-    sample = generate_power_sample(11, datetime.now(), past)
+    #sample = generate_power_sample(11, datetime.now(), past)
+    sample = generate_metering_sample(11, datetime.now(), past)
+
     power_samples.append(sample)
     #print(f"Meter: {sample['meterId']}, power:{sample['active_power']}, Factor:{sample['power_factor']}, time:{sample['timestamp']}")
 
@@ -79,12 +81,18 @@ try:
         cursor = connection.cursor()
 
         # SQL statement to insert energy sample data
+
+        insert_query_samples = "INSERT INTO samples (voltage, current, power_factor, apparent_power, active_power, reactive_power, meterId, createdAt, updatedAt) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())"
         insert_query = "INSERT INTO powerdots (meterId, active_power, power_factor, createdAt, updatedAt) VALUES (%s, %s, %s, %s, NOW())"
 
         # Insert each energy sample into the table
         for sample in power_samples:
             data_tuple = (sample['meterId'], sample['active_power'], sample['power_factor'], sample['createdAt'])
             cursor.execute(insert_query, data_tuple)
+            connection.commit()
+            
+            data_tuple = (sample['voltage'], sample['current'], sample['power_factor'], sample['apparent_power'], sample['active_power'], sample['reactive_power'], sample['meterId'], sample['createdAt'])
+            cursor.execute(insert_query_samples, data_tuple)
             connection.commit()
 
         print("Energy samples inserted successfully.")
